@@ -32,6 +32,14 @@ class TraverseStaticTest extends TestCase
     static::assertEquals($expected, json_encode(Traverse::get($path, $obj, $separator)));
     static::assertEquals($expected, json_encode(Traverse::get($path, $arr, $separator)));
   }
+  public function testGetRef()
+  {
+    $subj = json_decode('{"a": {"b": {"c": {"n": null}}}}');
+    $c    = Traverse::get('a.b.c', $subj);
+    static::assertNull($subj->a->b->c->n);
+    $c->n = 'Changed';
+    static::assertEquals('Changed', $subj->a->b->c->n);
+  }
 
   /** @dataProvider dataDel */
   public function testDel($subj, $path, $expected, $separator = '.'): void
@@ -83,6 +91,7 @@ class TraverseStaticTest extends TestCase
     yield ['{"a":{"b":42}}', 'a->c', 'null', '->'];
     yield ['{"a":{"b":["x", 42]}}', 'a->b->1', '42', '->'];
     yield ['{"a":{"b":["x", 42]}}', 'a.b', '["x",42]'];
+    yield ['{"a":{"b":["x", 42]}}', 'a/b/1', '42', '/'];
   }
   public function dataDel(): Generator
   {
