@@ -1,0 +1,32 @@
+{
+  "name": "arth/traverse",
+  "description": "Service for manipulate path",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexander Deider",
+      "email": "arth.inbox@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Arth\\Util\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Test\\": "tests/"
+    }
+  },
+  "require": {
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~8.4"
+  },
+  "config": {
+    "platform": {
+      "php": "7.3"
+    }
+  }
+}
