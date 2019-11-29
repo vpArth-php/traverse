@@ -2,11 +2,11 @@
 
 namespace Test;
 
-use Arth\Util\Traverse;
+use Arth\Util\Traverse\Traverse;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
-class TraverseStaticTest extends TestCase
+class StaticTest extends TestCase
 {
   /**
    * @dataProvider dataSet
@@ -32,7 +32,7 @@ class TraverseStaticTest extends TestCase
     static::assertEquals($expected, json_encode(Traverse::get($path, $obj, $separator)));
     static::assertEquals($expected, json_encode(Traverse::get($path, $arr, $separator)));
   }
-  public function testGetRef()
+  public function testGetRef(): void
   {
     $subj = json_decode('{"a": {"b": {"c": {"n": null}}}}');
     $c    = Traverse::get('a.b.c', $subj);
@@ -56,7 +56,7 @@ class TraverseStaticTest extends TestCase
     static::assertEquals($expectedObj, $obj, json_encode(['o', $obj, $expectedObj]));
     static::assertEquals($expectedArr, $arr, json_encode(['a', $arr, $expectedArr]));
   }
-  public function testHas()
+  public function testHas(): void
   {
     $subj = json_decode('{"a": {"b": {"c": {"n": null}}}}');
 
@@ -67,7 +67,7 @@ class TraverseStaticTest extends TestCase
     static::assertFalse(Traverse::has('a.b.c.d', $subj));
   }
 
-  public function testGetPath()
+  public function testGetPath(): void
   {
     static::assertEquals(['a', 'b', 'c'], Traverse::getPath('a/b/c', '/', 0));
     static::assertEquals(['a', 'b', 'c'], Traverse::getPath('a/b/c/n', '/', 1));

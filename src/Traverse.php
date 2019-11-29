@@ -1,50 +1,11 @@
 <?php
 
-namespace Arth\Util;
+namespace Arth\Util\Traverse;
 
-use ArrayAccess;
-use Countable;
-use JsonSerializable;
 use StdClass;
 
-class Traverse implements ArrayAccess, Countable, JsonSerializable
+class Traverse
 {
-  protected $data;
-  protected $separator;
-  public function __construct($data, $separator = '.')
-  {
-    $this->data      = $data;
-    $this->separator = $separator;
-  }
-
-  public function offsetExists($offset): bool { return static::has($offset, $this->data, $this->separator); }
-  public function offsetGet($offset) { return static::get($offset, $this->data, $this->separator); }
-  public function offsetSet($offset, $value): void { static::set($offset, $value, $this->data, $this->separator); }
-  public function offsetUnset($offset): void { static::del($offset, $this->data, $this->separator); }
-
-  public function __isset($name) { return null !== ($this[$name] ?? null); }
-  public function __get($name) { return $this[$name]; }
-  public function __set($name, $value) { $this[$name] = $value; }
-  public function __unset($name) { unset($this[$name]); }
-
-  public function count() { return count($this->data); }
-  public function jsonSerialize() { return (array)$this->data; }
-
-  public static function has($path, $data, $separator = '.'): bool
-  {
-    if ($path === '' || $path === []) {
-      return false;
-    }
-    if (is_string($path)) {
-      $path = static::getPath($path, $separator);
-    }
-    $k = array_shift($path);
-
-    if (empty($path)) {
-      return array_key_exists($k, (array)$data);
-    }
-    return static::has($path, is_array($data) ? $data[$k] : $data->$k);
-  }
   public static function &get($path, &$data, $separator = '.')
   {
     if ($path === '' || $path === []) {
@@ -124,7 +85,22 @@ class Traverse implements ArrayAccess, Countable, JsonSerializable
     }
     static::set($path, $value, $p);
   }
-  public static function getPath(string $key, $separator = '.', $skipLast = 0)
+  public static function has($path, $data, $separator = '.'): bool
+  {
+    if ($path === '' || $path === []) {
+      return false;
+    }
+    if (is_string($path)) {
+      $path = static::getPath($path, $separator);
+    }
+    $k = array_shift($path);
+
+    if (empty($path)) {
+      return array_key_exists($k, (array)$data);
+    }
+    return static::has($path, is_array($data) ? $data[$k] : $data->$k);
+  }
+  public static function getPath(string $key, $separator = '.', $skipLast = 0): array
   {
     $path = explode($separator, $key);
 
@@ -134,5 +110,4 @@ class Traverse implements ArrayAccess, Countable, JsonSerializable
 
     return $path;
   }
-
 }

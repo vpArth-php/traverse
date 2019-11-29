@@ -1,8 +1,8 @@
 <?php
 
-namespace Arth\Util;
+namespace Arth\Util\Traverse;
 
-class TraverseService implements TraverseInterface
+class Service implements TraverseInterface
 {
   protected $separator;
 

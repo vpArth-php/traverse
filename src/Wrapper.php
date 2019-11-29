@@ -1,12 +1,12 @@
 <?php
 
-namespace Arth\Util;
+namespace Arth\Util\Traverse;
 
-class Traversed extends Traverse
+class Wrapper extends Container
 {
-  public function offsetGet($offset)
+  public function get($offset)
   {
-    $data = parent::offsetGet($offset);
+    $data = parent::get($offset);
     if (null === $data) {
       return null;
     }

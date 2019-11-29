@@ -1,6 +1,6 @@
 <?php
 
-namespace Arth\Util;
+namespace Arth\Util\Traverse;
 
 interface TraverseInterface
 {
