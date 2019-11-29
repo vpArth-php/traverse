@@ -3,9 +3,11 @@
 namespace Arth\Util;
 
 use ArrayAccess;
+use Countable;
+use JsonSerializable;
 use StdClass;
 
-class Traverse implements ArrayAccess
+class Traverse implements ArrayAccess, Countable, JsonSerializable
 {
   protected $data;
   protected $separator;
@@ -15,7 +17,7 @@ class Traverse implements ArrayAccess
     $this->separator = $separator;
   }
 
-  public function offsetExists($offset) { return static::has($offset, $this->data, $this->separator); }
+  public function offsetExists($offset): bool { return static::has($offset, $this->data, $this->separator); }
   public function offsetGet($offset) { return static::get($offset, $this->data, $this->separator); }
   public function offsetSet($offset, $value): void { static::set($offset, $value, $this->data, $this->separator); }
   public function offsetUnset($offset): void { static::del($offset, $this->data, $this->separator); }
@@ -24,6 +26,9 @@ class Traverse implements ArrayAccess
   public function __get($name) { return $this[$name]; }
   public function __set($name, $value) { $this[$name] = $value; }
   public function __unset($name) { unset($this[$name]); }
+
+  public function count() { return count($this->data); }
+  public function jsonSerialize() { return (array)$this->data; }
 
   public static function has($path, $data, $separator = '.'): bool
   {
@@ -129,4 +134,5 @@ class Traverse implements ArrayAccess
 
     return $path;
   }
+
 }
