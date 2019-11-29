@@ -2,11 +2,12 @@
 
 namespace Arth\Util\Traverse;
 
+use Arth\Util\String\Escaper;
 use StdClass;
 
 class Traverse
 {
-  public static function &get($path, &$data, $separator = '.')
+  public static function &get($path, &$data, $separator = '.', $escape = '\\')
   {
     if ($path === '' || $path === []) {
       return $data;
@@ -16,7 +17,7 @@ class Traverse
       return $null;
     }
     if (is_string($path)) {
-      $path = static::getPath($path, $separator);
+      $path = static::getPath($path, $separator, $escape);
     }
     $k = array_shift($path);
 
@@ -28,7 +29,7 @@ class Traverse
 
     return static::get($path, $v);
   }
-  public static function del($path, &$data, $separator = '.'): void
+  public static function del($path, &$data, $separator = '.', $escape = '\\'): void
   {
     $isArray = is_array($data);
     if ($path === '' || $path === []) {
@@ -37,7 +38,7 @@ class Traverse
       return;
     }
     if (is_string($path)) {
-      $path = static::getPath($path, $separator);
+      $path = static::getPath($path, $separator, $escape);
     }
     $last = array_pop($path);
     $subj =& $data;
@@ -56,14 +57,14 @@ class Traverse
       unset($subj->$last);
     }
   }
-  public static function set($path, $value, &$data, $separator = '.'): void
+  public static function set($path, $value, &$data, $separator = '.', $escape = '\\'): void
   {
     if ($path === '' || $path === []) {
       $data = $value;
       return;
     }
     if (is_string($path)) {
-      $path = static::getPath($path, $separator);
+      $path = static::getPath($path, $separator, $escape);
     }
     $k = array_shift($path);
 
@@ -85,13 +86,13 @@ class Traverse
     }
     static::set($path, $value, $p);
   }
-  public static function has($path, $data, $separator = '.'): bool
+  public static function has($path, $data, $separator = '.', $escape = '\\'): bool
   {
     if ($path === '' || $path === []) {
       return false;
     }
     if (is_string($path)) {
-      $path = static::getPath($path, $separator);
+      $path = static::getPath($path, $separator, $escape);
     }
     $k = array_shift($path);
 
@@ -100,14 +101,12 @@ class Traverse
     }
     return static::has($path, is_array($data) ? $data[$k] : $data->$k);
   }
-  public static function getPath(string $key, $separator = '.', $skipLast = 0): array
+  public static function getPath(string $key, $separator = '.', string $escape = '\\', $skipLast = 0): array
   {
-    $path = explode($separator, $key);
+    $esc = new Escaper($escape);
 
-    for ($i = 0; $i < $skipLast; ++$i) {
-      array_pop($path);
-    }
+    $path = $esc->split($separator, $key);
 
-    return $path;
+    return array_slice($path, 0, $skipLast ? -$skipLast : null);
   }
 }

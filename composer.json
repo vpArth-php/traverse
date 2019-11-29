@@ -19,7 +19,11 @@
       "Test\\": "tests/"
     }
   },
-  "require": {"ext-json": "*"},
+  "require": {
+    "ext-json": "*",
+    "arth/escaper": "dev-master",
+    "ext-mbstring": "*"
+  },
   "require-dev": {
     "phpunit/phpunit": "~8.4"
   },

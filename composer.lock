@@ -4,8 +4,45 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "4936af4b1890d1ef70baeade6d583e05",
-  "packages": [],
+  "content-hash": "33cd44e5ee7aecc374f6de98127dc250",
+  "packages": [
+    {
+      "name": "arth/escaper",
+      "version": "dev-master",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/vpArth-php/escaper.git",
+        "reference": "539e595af857e87c7eb8ede5d2287197239d6064"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/vpArth-php/escaper/zipball/539e595af857e87c7eb8ede5d2287197239d6064",
+        "reference": "539e595af857e87c7eb8ede5d2287197239d6064",
+        "shasum": ""
+      },
+      "require-dev": {
+        "phpunit/phpunit": "^8.4"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Arth\\Util\\String\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Alexander Deider",
+          "email": "arth.inbox@gmail.com"
+        }
+      ],
+      "description": "String tool for escape characters",
+      "time": "2019-11-29T21:55:24+00:00"
+    }
+  ],
   "packages-dev": [
     {
       "name": "doctrine/instantiator",
@@ -1527,10 +1564,15 @@
   ],
   "aliases": [],
   "minimum-stability": "stable",
-  "stability-flags": [],
+  "stability-flags": {
+    "arth/escaper": 20
+  },
   "prefer-stable": false,
   "prefer-lowest": false,
-  "platform": [],
+  "platform": {
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
   "platform-dev": [],
   "platform-overrides": {
     "php": "7.3"

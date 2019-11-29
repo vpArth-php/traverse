@@ -30,4 +30,12 @@ class WrapperTest extends TestCase
     static::assertArrayHasKey('a:x', $svc);
     static::assertArrayNotHasKey('b', $svc);
   }
+
+  public function testEscape(): void
+  {
+    $svc = new T\Wrapper(['a' => ['public:foo' => 5]], ':', '#');
+    /** @var T\Wrapper $actual */
+    $actual = $svc['a']['public#:foo'];
+    static::assertEquals(5, $actual->getValue());
+  }
 }

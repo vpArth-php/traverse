@@ -32,10 +32,30 @@ class StaticTest extends TestCase
     static::assertEquals($expected, json_encode(Traverse::get($path, $obj, $separator)));
     static::assertEquals($expected, json_encode(Traverse::get($path, $arr, $separator)));
   }
+  public function testEscape(): void
+  {
+    $path = 'asplitxescapesplityescape';
+    static::assertEquals(['a', 'xsplityescape'], Traverse::getPath($path, 'split', 'escape'));
+
+    $path = 'a.x\.y';
+    static::assertEquals(['a', 'x.y'], Traverse::getPath($path, '.', '\\'));
+
+    $path = 'a.x%.y%z';
+    static::assertEquals(['a', 'x.y%z'], Traverse::getPath($path, '.', '%'));
+
+    $path = 'a.x%%.y';
+    static::assertEquals(['a', 'x%', 'y'], Traverse::getPath($path, '.', '%'));
+
+    $arr = json_decode('{"a": {"x.y": 2}}', true);
+
+    static::assertEquals(2, Traverse::get('a.x\.y', $arr, '.', '\\'));
+  }
+
   public function testGetRef(): void
   {
     $subj = json_decode('{"a": {"b": {"c": {"n": null}}}}');
-    $c    = Traverse::get('a.b.c', $subj);
+    /** @var object $c */
+    $c = Traverse::get('a.b.c', $subj);
     static::assertNull($subj->a->b->c->n);
     $c->n = 'Changed';
     static::assertEquals('Changed', $subj->a->b->c->n);
@@ -69,9 +89,9 @@ class StaticTest extends TestCase
 
   public function testGetPath(): void
   {
-    static::assertEquals(['a', 'b', 'c'], Traverse::getPath('a/b/c', '/', 0));
-    static::assertEquals(['a', 'b', 'c'], Traverse::getPath('a/b/c/n', '/', 1));
-    static::assertEquals(['a', 'b'], Traverse::getPath('a/b/c/n', '/', 2));
+    static::assertEquals(['a', 'b', 'c'], Traverse::getPath('a/b/c', '/', '\\', 0));
+    static::assertEquals(['a', 'b', 'c'], Traverse::getPath('a/b/c/n', '/', '\\', 1));
+    static::assertEquals(['a', 'b'], Traverse::getPath('a/b/c/n', '/', '\\', 2));
   }
 
   public function dataSet(): Generator
